@@ -2,6 +2,8 @@
 
 import type { Product, CartItem } from '@/lib/types';
 import React, { createContext, useReducer, useContext, type ReactNode, useEffect } from 'react';
+import { cart as cartApi } from '@/lib/api';
+import { getProductById } from '@/lib/mock-data';
 
 interface CartState {
   items: CartItem[];
@@ -82,42 +84,105 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
 
   useEffect(() => {
-    // Load cart from localStorage on initial render (client-side only)
-    if (typeof window !== 'undefined') {
-      const storedCart = localStorage.getItem('techShowcaseCart');
-      if (storedCart) {
-        try {
-          const parsedCart: CartItem[] = JSON.parse(storedCart);
-          dispatch({ type: 'LOAD_CART', items: parsedCart });
-        } catch (error) {
-          console.error("Failed to parse cart from localStorage", error);
-          localStorage.removeItem('techShowcaseCart');
+    // Only load cart from backend if user is logged in
+    async function loadCart() {
+      if (typeof window !== 'undefined') {
+        const email = localStorage.getItem('userEmail');
+        if (email) {
+          try {
+            const result = await cartApi.get(email);
+            if (result.cart && Array.isArray(result.cart.items)) {
+              // Use getProductById to get real product info
+              const items = result.cart.items.map((item: any) => {
+                const product = getProductById(item.productId);
+                if (product) {
+                  return { product, quantity: item.quantity };
+                }
+                // fallback if product not found
+                return {
+                  product: {
+                    id: item.productId,
+                    name: item.name,
+                    price: item.price,
+                    stock: item.quantity,
+                    images: [],
+                    shortDescription: '',
+                    description: '',
+                    category: '',
+                    coverImageIndex: 0,
+                    categoryIconName: '',
+                  },
+                  quantity: item.quantity,
+                };
+              });
+              dispatch({ type: 'LOAD_CART', items });
+              return;
+            }
+          } catch (err) {
+            // If backend fails, start with empty cart
+            dispatch({ type: 'LOAD_CART', items: [] });
+          }
+        } else {
+          // No user logged in, start with empty cart
+          dispatch({ type: 'LOAD_CART', items: [] });
         }
       }
     }
+    loadCart();
+    // Listen for authChange to reload cart after login/logout
+    function handleAuthChange() {
+      loadCart();
+    }
+    window.addEventListener('authChange', handleAuthChange);
+    return () => {
+      window.removeEventListener('authChange', handleAuthChange);
+    };
   }, []);
 
-  useEffect(() => {
-    // Save cart to localStorage whenever it changes (client-side only)
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('techShowcaseCart', JSON.stringify(state.items));
-    }
-  }, [state.items]);
-
-  const addToCart = (product: Product, quantity: number = 1) => {
+  const addToCart = async (product: Product, quantity: number = 1) => {
     dispatch({ type: 'ADD_ITEM', product, quantity });
+    // Persist to backend if user is logged in
+    if (typeof window !== 'undefined') {
+      const email = localStorage.getItem('userEmail');
+      if (email) {
+        await cartApi.addProductToDb(email, {
+          productId: product.id,
+          name: product.name,
+          price: product.price,
+          quantity,
+        });
+      }
+    }
   };
 
-  const removeFromCart = (productId: string) => {
+  const removeFromCart = async (productId: string) => {
     dispatch({ type: 'REMOVE_ITEM', productId });
+    if (typeof window !== 'undefined') {
+      const email = localStorage.getItem('userEmail');
+      if (email) {
+        await cartApi.removeItemFromDb(email, productId);
+      }
+    }
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = async (productId: string, quantity: number) => {
     dispatch({ type: 'UPDATE_QUANTITY', productId, quantity });
+    if (typeof window !== 'undefined') {
+      const email = localStorage.getItem('userEmail');
+      if (email) {
+        await cartApi.updateItemInDb(email, productId, quantity);
+      }
+    }
   };
   
-  const clearCart = () => {
+  const clearCart = async () => {
     dispatch({ type: 'CLEAR_CART' });
+    if (typeof window !== 'undefined') {
+      const email = localStorage.getItem('userEmail');
+      if (email) {
+        await cartApi.clearDb(email);
+      }
+    }
   };
 
   const getItemQuantity = (productId: string): number => {
