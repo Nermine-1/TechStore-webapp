@@ -10,6 +10,7 @@ import { Menu } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { auth } from '@/lib/api';
 import { useRouter } from 'next/navigation';
+import { ThemeToggle } from './theme-toggle';
 
 export default function Header() {
   const { totalItems } = useCart();
@@ -49,6 +50,7 @@ export default function Header() {
           { href: '/register', label: 'Register', icon: <UserPlus className="h-5 w-5" /> },
         ]
       : [
+          { href: '/admin', label: 'Admin', icon: <Briefcase className="h-5 w-5" /> },
           { href: '#', label: 'Logout', icon: <LogIn className="h-5 w-5 rotate-180" />, onClick: handleLogout },
         ]),
   ];
@@ -95,6 +97,7 @@ export default function Header() {
           )}
         </Button>
       ))}
+      <ThemeToggle />
     </nav>
   );
 

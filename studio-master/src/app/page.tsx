@@ -50,7 +50,7 @@ export default function HomePage() {
 
   return (
     <div className="space-y-12">
-      <section className="rounded-lg bg-gradient-to-r from-primary via-primary/80 to-accent p-8 text-center shadow-lg md:p-16">
+      <section className="animate-fade-in-down rounded-lg bg-gradient-to-r from-primary via-primary/80 to-accent p-8 text-center shadow-lg md:p-16">
         <h1 className="mb-4 text-4xl font-bold tracking-tight text-primary-foreground md:text-5xl">
           Welcome <span style={{color: 'purple'}}>{userName}</span> to Tech Store
         </h1>
@@ -139,17 +139,17 @@ export default function HomePage() {
       <section className="py-12 text-center">
         <h2 className="mb-4 text-2xl font-semibold">Why Choose Us?</h2>
         <div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-3">
-          <div className="rounded-lg border bg-card p-6 shadow-sm">
+          <div className="animate-slide-in-left rounded-lg border bg-card p-6 shadow-sm">
             <ShieldCheck className="mx-auto mb-4 h-12 w-12 text-primary" />
             <h3 className="mb-2 text-xl font-medium text-primary">Quality Guaranteed</h3>
             <p className="text-muted-foreground">Only the best tech, thoroughly vetted.</p>
           </div>
-          <div className="rounded-lg border bg-card p-6 shadow-sm">
+          <div className="animate-slide-in-up rounded-lg border bg-card p-6 shadow-sm">
             <LifeBuoy className="mx-auto mb-4 h-12 w-12 text-primary" />
             <h3 className="mb-2 text-xl font-medium text-primary">Expert Support</h3>
             <p className="text-muted-foreground">Knowledgeable team ready to assist you.</p>
           </div>
-          <div className="rounded-lg border bg-card p-6 shadow-sm">
+          <div className="animate-slide-in-right rounded-lg border bg-card p-6 shadow-sm">
             <Truck className="mx-auto mb-4 h-12 w-12 text-primary" />
             <h3 className="mb-2 text-xl font-medium text-primary">Fast Shipping</h3>
             <p className="text-muted-foreground">Get your tech delivered quickly.</p>

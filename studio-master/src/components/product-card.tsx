@@ -7,6 +7,17 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCart } from '@/hooks/use-cart';
 import { toast } from '@/hooks/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { ShoppingCart, Eye } from 'lucide-react';
 
 interface ProductCardProps {
@@ -27,7 +38,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const coverImage = product.images[product.coverImageIndex ?? 0] || 'https://placehold.co/600x400.png';
 
   return (
-    <Card className="flex h-full flex-col overflow-hidden rounded-lg shadow-lg transition-all hover:shadow-xl">
+    <Card className="flex h-full flex-col overflow-hidden rounded-lg shadow-lg transition-all hover:shadow-xl hover:transform hover:-translate-y-1">
       <CardHeader className="p-0">
         <Link href={`/products/${product.id}`} aria-label={`View details for ${product.name}`}>
           <div className="aspect-[4/3] overflow-hidden">
@@ -61,9 +72,27 @@ export default function ProductCard({ product }: ProductCardProps) {
             <Eye className="mr-2 h-4 w-4" /> View
           </Link>
         </Button>
-        <Button onClick={handleAddToCart} className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-          <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
-        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+              <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Add to Cart</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to add {product.name} to your cart?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleAddToCart}>
+                Continue
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </CardFooter>
     </Card>
   );

@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useEffect } from 'react';
+import { orders } from '@/lib/api';
 
 const checkoutFormSchema = z.object({
   fullName: z.string().min(2, { message: "Full name must be at least 2 characters." }),
@@ -60,15 +61,39 @@ export default function CheckoutPage() {
     return <div className="py-12 text-center">Loading...</div>; // Or null, or a more specific loading component
   }
 
-  const handlePlaceOrder = (data: CheckoutFormValues) => {
-    console.log("Placing mock order with data:", data);
-    toast({
-      title: 'Order Placed (Simulation)!',
-      description: 'Thank you for your purchase. This is a demo and no real order was processed.',
-      action: <CheckCircle className="text-green-500" />,
-    });
-    clearCart();
-    router.push('/order-confirmation'); // Navigate to a mock confirmation page
+  const handlePlaceOrder = async (data: CheckoutFormValues) => {
+    console.log('Submitting order form', data);
+    try {
+      // Prepare order data
+      const orderPayload = {
+        customerName: data.fullName,
+        total: totalPrice,
+        products: state.items.map(item => ({
+          productId: item.product.id,
+          name: item.product.name,
+          price: item.product.price,
+          quantity: item.quantity,
+        })),
+      };
+      console.log('Order payload:', orderPayload);
+      // Send order to backend
+      const response = await orders.create(orderPayload);
+      console.log('Order created response:', response);
+      toast({
+        title: 'Order Placed!',
+        description: 'Thank you for your purchase. Your order has been placed.',
+        action: <CheckCircle className="text-green-500" />, 
+      });
+      await clearCart();
+      router.push('/order-confirmation');
+    } catch (err) {
+      console.error('Order creation failed:', err);
+      toast({
+        title: 'Order Failed',
+        description: 'There was a problem placing your order. Please try again.',
+        action: <AlertTriangle className="text-red-500" />, 
+      });
+    }
   };
 
   const handleSuccessfulMockPayment = () => {
@@ -177,7 +202,7 @@ export default function CheckoutPage() {
                   )}
                 />
                 <Button type="submit" size="lg" className="w-full mt-6">
-                  <CreditCard className="mr-2 h-5 w-5" /> Place Order (Mock)
+                  <CreditCard className="mr-2 h-5 w-5" /> Place Order
                 </Button>
               </form>
             </Form>

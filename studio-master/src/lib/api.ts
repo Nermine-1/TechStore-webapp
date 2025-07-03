@@ -57,6 +57,10 @@ export const auth = {
     const response = await api.post('/users/update-name', { email, name });
     return response.data;
   },
+  getAllUsers: async () => {
+    const response = await api.get('/users');
+    return response.data;
+  },
 };
 
 export const products = {
@@ -139,4 +143,4 @@ export function decodeJWT(token: string): any {
   }
 }
 
-export default api; 
+export default api;

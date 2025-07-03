@@ -37,3 +37,23 @@ export type CartItem = {
   product: Product;
   quantity: number;
 };
+
+export type Order = {
+  _id?: string;
+  id?: string;
+  customerName: string;
+  total: number;
+  createdAt: string;
+  products: {
+    productId: string;
+    name: string;
+    price: number;
+    quantity: number;
+  }[];
+};
+
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+};

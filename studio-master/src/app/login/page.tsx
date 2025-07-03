@@ -86,6 +86,25 @@ export default function LoginPage() {
                 disabled={isLoading}
               />
             </div>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password">Password</Label>
+              <Link
+                href="/forgot-password"
+                className="text-sm text-primary hover:underline"
+              >
+                Forgot Password?
+              </Link>
+            </div>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              disabled={isLoading}
+            />
             <Button type="submit" className="w-full" disabled={isLoading}>
               <LogIn className="mr-2 h-4 w-4" />
               {isLoading ? 'Signing in...' : 'Sign In'}
@@ -101,4 +120,4 @@ export default function LoginPage() {
       </Card>
     </div>
   );
-} 
+}

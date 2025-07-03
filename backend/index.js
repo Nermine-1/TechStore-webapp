@@ -235,6 +235,90 @@ app.post('/api/cart/update', async (req, res) => {
   }
 });
 
+// Order schema and model
+const orderProductSchema = new mongoose.Schema({
+  productId: { type: String, required: true },
+  name: { type: String, required: true },
+  price: { type: Number, required: true },
+  quantity: { type: Number, required: true },
+});
+
+const orderSchema = new mongoose.Schema({
+  customerName: { type: String, required: true },
+  total: { type: Number, required: true },
+  createdAt: { type: Date, default: Date.now },
+  products: [orderProductSchema],
+});
+
+const Order = mongoose.model('Order', orderSchema);
+
+// Create order endpoint
+app.post('/api/orders', async (req, res) => {
+  const { customerName, total, products } = req.body;
+  if (!customerName || typeof total !== 'number' || !Array.isArray(products)) {
+    return res.status(400).json({ message: 'Invalid order data.' });
+  }
+  try {
+    const order = new Order({ customerName, total, products });
+    await order.save();
+    res.status(201).json({ message: 'Order created successfully.', order });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error.' });
+  }
+});
+
+// Get all orders endpoint
+app.get('/api/orders', async (req, res) => {
+  try {
+    const orders = await Order.find().sort({ createdAt: -1 });
+    res.json(orders);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error.' });
+  }
+});
+
+// Get order by ID endpoint
+app.get('/api/orders/:id', async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ message: 'Order not found.' });
+    res.json(order);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error.' });
+  }
+});
+
+// Get all users endpoint
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error.' });
+  }
+});
+
+// Product schema and model
+const productSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  price: { type: Number, required: true },
+  // Add other fields as needed
+});
+const Product = mongoose.model('Product', productSchema);
+
+// Get all products endpoint
+app.get('/api/products', async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error.' });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Backend server running on port ${PORT}`);
