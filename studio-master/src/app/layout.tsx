@@ -40,7 +40,7 @@ export default function RootLayout({
         >
           <CartProvider>
             <Header />
-            <main className="flex-grow container mx-auto px-4 py-8 md:px-6">
+            <main className="flex-grow">
               {children}
             </main>
             <Footer />

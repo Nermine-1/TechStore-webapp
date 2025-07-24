@@ -43,30 +43,30 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 5.9%; /* Slightly lighter than background for cards in dark mode */
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 210 40% 70%; /* Lighter blue for dark mode */
-    --primary-foreground: 0 0% 9%; /* Dark text on lighter primary */
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 270 40% 70%; /* Lighter purple for dark mode */
-    --accent-foreground: 0 0% 9%; /* Dark text on lighter accent */
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 210 40% 70%; /* Primary color for rings in dark mode */
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --background: 240 10% 0%; /* Pure black background for maximum contrast */
+    --foreground: 0 0% 80%; /* Darker foreground for general text */
+    --card: 240 10% 5%; /* Even darker card background */
+    --card-foreground: 0 0% 80%; /* Lighter card foreground for better readability */
+    --popover: 240 10% 5%;
+    --popover-foreground: 0 0% 80%; /* Lighter popover foreground */
+    --primary: 210 100% 90%; /* Extremely bright blue for dark mode */
+    --primary-foreground: 0 0% 0%; /* Pure black text on primary */
+    --secondary: 240 5% 10%; /* More distinct secondary */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 240 5% 10%;
+    --muted-foreground: 0 0% 95%; /* Lighter muted foreground for better visibility */
+    --accent: 270 100% 90%; /* Extremely bright purple for dark mode */
+    --accent-foreground: 0 0% 0%; /* Pure black text on accent */
+    --destructive: 0 95% 60%; /* More visible destructive color */
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 5% 15%; /* Clearer border */
+    --input: 240 5% 10%;
+    --ring: 210 100% 90%; /* Primary color for rings in dark mode */
+    --chart-1: 220 100% 80%; /* Even brighter chart colors */
+    --chart-2: 160 90% 75%;
+    --chart-3: 30 100% 85%;
+    --chart-4: 280 95% 90%;
+    --chart-5: 340 100% 85%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

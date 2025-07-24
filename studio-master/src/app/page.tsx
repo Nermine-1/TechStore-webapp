@@ -50,7 +50,7 @@ export default function HomePage() {
 
   return (
     <div className="space-y-12">
-      <section className="animate-fade-in-down rounded-lg bg-gradient-to-r from-primary via-primary/80 to-accent p-8 text-center shadow-lg md:p-16">
+      <section className="animate-fade-in-down rounded-lg bg-gradient-to-r from-primary via-primary/80 to-accent p-8 text-center shadow-lg md:p-16 mx-4 md:mx-12">
         <h1 className="mb-4 text-4xl font-bold tracking-tight text-primary-foreground md:text-5xl">
           Welcome <span style={{color: 'purple'}}>{userName}</span> to Tech Store
         </h1>
