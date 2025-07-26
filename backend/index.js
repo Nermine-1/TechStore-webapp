@@ -11,7 +11,19 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI);
+
+
+const uri = process.env.MONGO_URI;
+
+if (!uri) {
+  console.error("❌ MONGO_URI environment variable is missing");
+  process.exit(1);
+}
+
+mongoose.connect(uri)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch(err => console.error("MongoDB connection error:", err));
+
 
 
 const userSchema = new mongoose.Schema({
