@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -11,10 +10,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { 
+import {
   Star, ShoppingCart, MessageSquare, Minus, Plus, CheckCircle,
   Smartphone, Laptop, Headphones, HardDrive, Cpu, MemoryStick, Palette, Zap, LucideIcon,
-  Keyboard, Camera // Added Keyboard and Camera
+  Keyboard, Camera
 } from 'lucide-react';
 import { useCart } from '@/hooks/use-cart';
 import { toast } from '@/hooks/use-toast';
@@ -30,8 +29,8 @@ const iconComponents: Record<string, LucideIcon | undefined> = {
   Palette,
   Zap,
   MessageSquare,
-  Keyboard, // Added Keyboard
-  Camera,   // Added Camera
+  Keyboard,
+  Camera,
 };
 
 function ProductNotFound() {
@@ -83,10 +82,10 @@ function ReviewCard({ review }: { review: ReviewType }) {
 export default function ProductDetailPage() {
   const params = useParams();
   const id = typeof params.id === 'string' ? params.id : '';
-  const [product, setProduct] = useState<Product | null | undefined>(undefined); // undefined for loading, null for not found
+  const [product, setProduct] = useState<Product | null | undefined>(undefined);
   const [quantity, setQuantity] = useState(1);
   const { addToCart, getItemQuantity } = useCart();
-  
+
   const currentCartQuantity = product ? getItemQuantity(product.id) : 0;
 
   useEffect(() => {
@@ -97,7 +96,6 @@ export default function ProductDetailPage() {
   }, [id]);
 
   if (product === undefined) {
-    // Optional: Add a loading spinner here
     return <div className="py-12 text-center">Loading product details...</div>;
   }
 
@@ -112,9 +110,9 @@ export default function ProductDetailPage() {
       description: `Total in cart: ${currentCartQuantity + quantity}`,
       action: <CheckCircle className="text-green-500" />,
     });
-    setQuantity(1); // Reset quantity input after adding
+    setQuantity(1);
   };
-  
+
   const handleQuantityChange = (newQuantity: number) => {
     if (newQuantity < 1) setQuantity(1);
     else if (newQuantity > product.stock) setQuantity(product.stock);
@@ -124,135 +122,137 @@ export default function ProductDetailPage() {
   const CategoryIconComponent = product.categoryIconName ? iconComponents[product.categoryIconName] : null;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="grid gap-8 md:grid-cols-2 lg:gap-12">
-        <ProductImageGallery images={product.images} productName={product.name} />
-        <div className="space-y-6">
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-3xl font-bold tracking-tight lg:text-4xl">{product.name}</CardTitle>
-              {CategoryIconComponent && (
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
-                  <CategoryIconComponent className="h-3.5 w-3.5" />
-                  {product.category}
-                </span>
-              )}
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-muted-foreground">{product.shortDescription}</p>
-              <p className="text-4xl font-extrabold text-primary">${product.price.toFixed(2)}</p>
-              <div className="text-sm text-green-600 font-medium">
-                {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
-              </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleQuantityChange(quantity - 1)}
-                  disabled={quantity <= 1 || product.stock === 0}
-                  aria-label="Decrease quantity"
-                >
-                  <Minus className="h-4 w-4" />
-                </Button>
-                <Input 
-                  type="number"
-                  value={quantity}
-                  onChange={(e) => handleQuantityChange(parseInt(e.target.value,10))}
-                  className="w-16 text-center"
-                  min="1"
-                  max={product.stock}
-                  disabled={product.stock === 0}
-                  aria-label="Product quantity"
-                />
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleQuantityChange(quantity + 1)}
-                  disabled={quantity >= product.stock || product.stock === 0}
-                  aria-label="Increase quantity"
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
-              <Button 
-                size="lg" 
-                onClick={handleAddToCart} 
-                className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
-                disabled={product.stock === 0 || quantity > product.stock - currentCartQuantity}
-              >
-                <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
-              </Button>
-               {quantity > product.stock - currentCartQuantity && product.stock > 0 && (
-                <p className="text-sm text-destructive">Not enough stock for desired quantity (in cart: {currentCartQuantity}).</p>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-
-      <Separator />
-
-      <div className="space-y-6">
-        <h2 className="text-2xl font-semibold">Product Details</h2>
-        <p className="text-foreground leading-relaxed">{product.longDescription}</p>
-      </div>
-
-      {product.specifications && product.specifications.length > 0 && (
-        <>
-          <Separator />
+    <div className="bg-muted min-h-screen py-10">
+      <div className="max-w-3xl mx-auto px-6 md:px-10 py-8 bg-background shadow-md rounded-lg space-y-12">
+        <div className="grid gap-8 md:grid-cols-2 lg:gap-12">
+          <ProductImageGallery images={product.images} productName={product.name} />
           <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">Specifications</h2>
-            <Card>
-              <CardContent className="p-0">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[150px]">Feature</TableHead>
-                      <TableHead>Detail</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {product.specifications.map((spec, index) => {
-                      const SpecIconComponent = spec.iconName ? iconComponents[spec.iconName] : null;
-                      return (
-                        <TableRow key={index}>
-                          <TableCell className="font-medium flex items-center gap-2">
-                            {SpecIconComponent && <SpecIconComponent className="h-4 w-4 text-muted-foreground" />}
-                            {spec.name}
-                          </TableCell>
-                          <TableCell>{spec.value}</TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
+            <Card className="shadow-lg">
+              <CardHeader>
+                <CardTitle className="text-3xl font-bold tracking-tight lg:text-4xl">{product.name}</CardTitle>
+                {CategoryIconComponent && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
+                    <CategoryIconComponent className="h-3.5 w-3.5" />
+                    {product.category}
+                  </span>
+                )}
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">{product.shortDescription}</p>
+                <p className="text-4xl font-extrabold text-primary">${product.price.toFixed(2)}</p>
+                <div className="text-sm text-green-600 font-medium">
+                  {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleQuantityChange(quantity - 1)}
+                    disabled={quantity <= 1 || product.stock === 0}
+                    aria-label="Decrease quantity"
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <Input
+                    type="number"
+                    value={quantity}
+                    onChange={(e) => handleQuantityChange(parseInt(e.target.value, 10))}
+                    className="w-16 text-center"
+                    min="1"
+                    max={product.stock}
+                    disabled={product.stock === 0}
+                    aria-label="Product quantity"
+                  />
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleQuantityChange(quantity + 1)}
+                    disabled={quantity >= product.stock || product.stock === 0}
+                    aria-label="Increase quantity"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+                <Button
+                  size="lg"
+                  onClick={handleAddToCart}
+                  className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
+                  disabled={product.stock === 0 || quantity > product.stock - currentCartQuantity}
+                >
+                  <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
+                </Button>
+                {quantity > product.stock - currentCartQuantity && product.stock > 0 && (
+                  <p className="text-sm text-destructive">
+                    Not enough stock for desired quantity (in cart: {currentCartQuantity}).
+                  </p>
+                )}
               </CardContent>
             </Card>
           </div>
-        </>
-      )}
+        </div>
 
-      {product.reviews && product.reviews.length > 0 && (
-        <>
-          <Separator />
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold">Customer Reviews</h2>
-              <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                <MessageSquare className="h-4 w-4" />
-                {product.reviews.length} reviews
-              </span>
+        <Separator />
+
+        <div className="space-y-6">
+          <h2 className="text-2xl font-semibold">Product Details</h2>
+          <p className="text-foreground leading-relaxed">{product.longDescription}</p>
+        </div>
+
+        {product.specifications && product.specifications.length > 0 && (
+          <>
+            <Separator />
+            <div className="space-y-6">
+              <h2 className="text-2xl font-semibold">Specifications</h2>
+              <Card>
+                <CardContent className="p-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-[150px]">Feature</TableHead>
+                        <TableHead>Detail</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {product.specifications.map((spec, index) => {
+                        const SpecIconComponent = spec.iconName ? iconComponents[spec.iconName] : null;
+                        return (
+                          <TableRow key={index}>
+                            <TableCell className="font-medium flex items-center gap-2">
+                              {SpecIconComponent && <SpecIconComponent className="h-4 w-4 text-muted-foreground" />}
+                              {spec.name}
+                            </TableCell>
+                            <TableCell>{spec.value}</TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
             </div>
-            <div className="space-y-4">
-              {product.reviews.map((review) => (
-                <ReviewCard key={review.id} review={review} />
-              ))}
+          </>
+        )}
+
+        {product.reviews && product.reviews.length > 0 && (
+          <>
+            <Separator />
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-semibold">Customer Reviews</h2>
+                <span className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <MessageSquare className="h-4 w-4" />
+                  {product.reviews.length} reviews
+                </span>
+              </div>
+              <div className="space-y-4">
+                {product.reviews.map((review) => (
+                  <ReviewCard key={review.id} review={review} />
+                ))}
+              </div>
             </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 }
-
-    
