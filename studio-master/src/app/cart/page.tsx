@@ -29,7 +29,7 @@ export default function CartPage() {
           100% {background-position: 0% 50%;}
         }
       `}</style>
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {state.items.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <ShoppingCart className="mb-6 h-16 w-16 text-muted-foreground" />

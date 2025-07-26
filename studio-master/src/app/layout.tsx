@@ -42,7 +42,7 @@ export default function RootLayout({
         >
           <CartProvider>
             <Header />
-            <main className="flex-grow">
+            <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8">
               {children}
             </main>
             <Footer />
