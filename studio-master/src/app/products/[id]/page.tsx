@@ -124,7 +124,7 @@ export default function ProductDetailPage() {
   const CategoryIconComponent = product.categoryIconName ? iconComponents[product.categoryIconName] : null;
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="grid gap-8 md:grid-cols-2 lg:gap-12">
         <ProductImageGallery images={product.images} productName={product.name} />
         <div className="space-y-6">
