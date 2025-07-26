@@ -79,11 +79,11 @@ export default function CheckoutPage() {
       // Send order to backend
       const response = await orders.create(orderPayload);
       console.log('Order created response:', response);
-      toast({
+    toast({
         title: 'Order Placed!',
         description: 'Thank you for your purchase. Your order has been placed.',
-        action: <CheckCircle className="text-green-500" />, 
-      });
+      action: <CheckCircle className="text-green-500" />,
+    });
       await clearCart();
       router.push('/order-confirmation');
     } catch (err) {
